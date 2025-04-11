@@ -27,7 +27,7 @@ Setelah semua subblok diproses, gabungkan informasi dari subblok-subblok pada st
    ```
 4. Pindah ke direktori project
    ```bash
-   Tucil1_13523088
+   Tucil2_13523088
    ```
 5. Compile program
    ```bash
