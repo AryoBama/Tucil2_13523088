@@ -66,4 +66,5 @@ Digunakan untuk membuat gif
 
 Berikut source code dari library di atas:
 https://github.com/charlietangora/gif-h/blob/master/gif.h#L766
+
 Tentu saja penggunaan library dimaksudkan untuk mempermudah proses dalam tugas ini. Penggunaan library ini bukan untuk mencari hasil instan, melainkan sebagai alat bantu yang efisien agar dapat lebih fokus pada logika inti dari program yang saya kerjakan
