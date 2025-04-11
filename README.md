@@ -47,7 +47,7 @@ Setelah semua subblok diproses, gabungkan informasi dari subblok-subblok pada st
    ```bash
    ./main
    ```
-10. Alternatif command jika compile gagal menggunakan command
+10. Alternatif command jika compile gagal menggunakan perintah make
     ```
     g++ -g -Wall -std=c++17 src/Color.cpp src/Quadtree.cpp src/QuadtreeNode.cpp src/main.cpp src/utility.cpp -o bin/main
     ```
