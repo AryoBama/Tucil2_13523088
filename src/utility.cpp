@@ -158,9 +158,11 @@ unsigned char* imageByCompressionRate(const vector<vector<Color>>& image, double
         int loading = percentage/compressionRate * 100;
 
         cout << "Loading... " << loading << "%\n";
+        
 
 
-    }while(maxThreshold- minThreshold  < 2 && abs(percentage - compressionRate) > tolerance);
+
+    }while(maxThreshold - minThreshold  >= 2 && abs(percentage - compressionRate) > tolerance);
 
 
     return imageData;
