@@ -56,11 +56,11 @@ int main(){
             cout << "Itu bukan angka, coba lagi!\n";
             cin.clear();              
             cin.ignore(1000, '\n');   
-        }else if (errorMethod < 1 && errorMethod > 5){
+        }else if (errorMethod < 1 || errorMethod > 5){
             cout << "Pilih angka di rentang 1 - 5\n";
         }
         
-    }while (errorMethod < 1 && errorMethod > 5);
+    }while (errorMethod < 1 || errorMethod > 5);
     
     while (true) {
         cout << "Masukkan compression rate: ";
