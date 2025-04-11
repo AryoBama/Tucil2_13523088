@@ -16,8 +16,12 @@ unsigned char* convertToByteArray(const vector<vector<Color>>& image, int& width
 
 void image_write_func(void* context, void* data, int size);
 
-unsigned char* imageByCompressionRate(const vector<vector<Color>>& image, double compressionRate, int errorMethod, uintmax_t sizeBytes, int &nNode, int &depthTree);
+unsigned char* imageByCompressionRate(const vector<vector<Color>>& image, double compressionRate, int errorMethod, uintmax_t sizeBytes, 
+    int &nNode, int &depthTree, int channels);
 
-void createGif(const vector<std::vector<Color>> &image, unsigned char* compressImageData, const char* filename, int width, int height, int depthTree); 
+void createGif(const vector<std::vector<Color>> &image, unsigned char* compressImageData, const char* filename, int width, int height, int depthTree, int channels);
+
+string getFileExtension(const std::string& filePath);
 
 #endif
+

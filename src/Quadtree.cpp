@@ -201,46 +201,22 @@ double Quadtree::countError(const vector<vector<Color>>& image){
         
     }else if (errorMethod == 5){
 
-        Color normalize = normalizeColor(image);
-
-        double redValueY = normalize.getRed();
-        double greenValueY = normalize.getGreen();
-        double blueValueY = normalize.getBlue();
-
-        double meanRedX = 0;
-        double meanGreenX = 0;
-        double meanBlueX = 0;
-
-        for (size_t i = 0; i < image.size(); i++){
-            for (size_t j = 0; j < image[0].size(); j++){
-
-                meanRedX += image[i][j].getRed();
-                meanGreenX += image[i][j].getGreen();
-                meanBlueX += image[i][j].getBlue();
-
-            }
-        }
-    
-        meanRedX /= size;
-        meanGreenX /= size;
-        meanBlueX /= size;
         
         double varianceRedX = 0, varianceGreenX = 0, varianceBlueX = 0;
 
         countVariance(image, varianceRedX, varianceGreenX, varianceBlueX);
 
-        const double C1 = pow((0.01 * 255),2);
         const double C2 = pow((0.03 * 255),2);
 
-        double SSIMRed = ((2 * redValueY * meanRedX + C1) * C2) / ( ( pow(meanRedX,2) + pow(redValueY,2) + C1 ) * ( varianceRedX + C2 ) );
-        double SSIMGreen = ((2 * greenValueY * meanGreenX + C1) * C2) / ( ( pow(meanGreenX,2) + pow(greenValueY,2) + C1 ) * ( varianceGreenX + C2 ) );
-        double SSIMBlue = ((2 * blueValueY * meanBlueX + C1) * C2) / ( ( pow(meanBlueX,2) + pow(blueValueY,2) + C1 ) * ( varianceBlueX + C2 ) );
+        double SSIMRed = (C2) / (varianceRedX + C2);
+        double SSIMGreen = (C2) /  (varianceGreenX + C2);
+        double SSIMBlue = (C2) / (varianceBlueX + C2  );
 
         return 0.299 * SSIMRed + 0.587 * SSIMGreen + 0.114 * SSIMBlue;
     
 
     }else{
-        return -1;
+        return 1;
     }
 }
 
@@ -263,6 +239,7 @@ Color Quadtree:: normalizeColor(const vector<vector<Color>>& block){
     meanR /= size;
     meanG /= size;
     meanB /= size;
+    
 
     return Color(meanR, meanG, meanB);
 
@@ -278,10 +255,10 @@ QuadtreeNode* Quadtree:: construct(const vector<vector<Color>>& block, int x, in
     // cout << error << endl;
 
 
-    bool isThreshold = errorMethod != 5 ? error < threshold : error > threshold;
+    bool isHomogeneus = errorMethod != 5 ? error < threshold : error > threshold;
    
 
-    if (isThreshold || (height/ 2 < minBlock/(width / 2)) || (width / 2 < minBlock/(height/ 2))){
+    if (isHomogeneus || (height * width / 4 < minBlock)){
 
         Color normalize = normalizeColor(block);
 
@@ -341,8 +318,11 @@ int Quadtree::countNode(QuadtreeNode *node){
     if (node->isLeaf){
         return 1;
     }
+    if (node != root){
 
-    return 1 + countNode(node->getTopLeft()) + countNode(node->getTopRight()) + countNode(node->getBottomLeft()) + countNode(node->getBottomRight());
+        return 1 + countNode(node->getTopLeft()) + countNode(node->getTopRight()) + countNode(node->getBottomLeft()) + countNode(node->getBottomRight());
+    }
+    return countNode(node->getTopLeft()) + countNode(node->getTopRight()) + countNode(node->getBottomLeft()) + countNode(node->getBottomRight());
 }
 
 int Quadtree::countLeaf(QuadtreeNode *node){

@@ -10,12 +10,16 @@ class Color{
         int r;
         int g;
         int b;
+        int a;
+        int channels;
 
     public:
 
         Color();
 
         Color(int r, int g, int b);
+
+        Color(int r, int g, int b, int a);
 
         Color(const Color& other);
 
@@ -29,12 +33,17 @@ class Color{
 
         int getGreen() const;
 
+        int getAlpha() const;
+
+        int getChannels() const;
+
         void setRed(int r);
 
         void setBlue(int b);
 
         void setGreen(int g);
 
+        void setAlpha(int a);
 
 };
 

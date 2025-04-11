@@ -12,7 +12,7 @@ using namespace std::chrono;
 
 int main(){
 
-    string addressPath, savePath, GIFPath;
+    string addressPath, savePath, GIFPath, extension = "";
     int errorMethod = 0;
     double compressionRate = 0;
     unsigned char* imageData;
@@ -26,13 +26,15 @@ int main(){
     cout << "Masukkan alamat gambar yang ingin dikompresi: ";
     getline(cin, addressPath);
 
+    extension = getFileExtension(addressPath);
+
     cout << "Masukkan alamat tempat menyimpan gambar: ";
     getline(cin, savePath);
 
     cout << "Masukkan alamat tempat menyimpan GIF: ";
     getline(cin, GIFPath);
 
-    unsigned char* data = stbi_load(addressPath.c_str(), &width, &height, &channels, 3);
+    unsigned char* data = stbi_load(addressPath.c_str(), &width, &height, &channels, 0);
 
     vector<vector<Color>> image = imageToVector(data,width,height,channels);
 
@@ -118,7 +120,8 @@ int main(){
         mergeBlock(quadtree.getRoot(), compression, width, height);
 
         nNode = quadtree.countNode(quadtree.getRoot());
-        depthTree = quadtree.countDepth(quadtree.getRoot(),0);
+        depthTree = quadtree.countDepth(quadtree.getRoot(),-1);
+        
 
         imageData = convertToByteArray(compression, width, height, channels);
         
@@ -127,7 +130,7 @@ int main(){
         auto start = high_resolution_clock::now();
         cout << "Sedang mengkompresi...\n";
         cout << "Loading... 0%\n";
-        imageData = imageByCompressionRate(image, compressionRate, errorMethod, sizeBytes, nNode, depthTree);
+        imageData = imageByCompressionRate(image, compressionRate, errorMethod, sizeBytes, nNode, depthTree, channels);
         auto stop = high_resolution_clock::now();
         auto duration = duration_cast<milliseconds>(stop - start);
         executeTime = duration.count();
@@ -140,10 +143,32 @@ int main(){
 
     
 
+    if (extension == "png"){
 
-    stbi_write_jpg(savePath.c_str(), width, height, channels, imageData, 90);
+        if (channels == 4) {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int index = (y * width + x) * 4;
+                    imageData[index + 3] = image[y][x].getAlpha();
 
-    createGif(image,imageData,GIFPath.c_str(),width, height, depthTree);
+                }
+            }
+        }
+
+        stbi_write_png(savePath.c_str(), width, height, channels, imageData, width * channels);
+
+    }else{
+        stbi_write_jpg(savePath.c_str(), width, height, channels, imageData, 90);
+    }
+
+    auto start = high_resolution_clock::now();
+
+    createGif(image,imageData,GIFPath.c_str(),width, height, depthTree, channels);
+
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<milliseconds>(stop - start);
+    executeTime += duration.count();
+
 
     cout << "Waktu eksekusi: " << executeTime << " ms" << endl;
 
@@ -159,7 +184,10 @@ int main(){
     
     cout << "Node: " << nNode << endl;
     cout << "depth: " << depthTree << endl;
-    
+
+
+
+
     delete[] imageData;
     
 }
