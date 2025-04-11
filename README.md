@@ -63,7 +63,6 @@ Berikut source code dari library di atas:
 https://github.com/nothings/stb/blob/master/stb_image_write.h
 3.	gif.h
 Digunakan untuk membuat gif
-
 Berikut source code dari library di atas:
 https://github.com/charlietangora/gif-h/blob/master/gif.h#L766
 
