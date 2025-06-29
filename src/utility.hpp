@@ -6,6 +6,7 @@
 #include <vector>
 #include "Color.hpp"
 #include "QuadTree.hpp"
+#include <stdint.h>
 
 
 vector<vector<Color>> imageToVector (unsigned char* data, int width, int height, int channels);
